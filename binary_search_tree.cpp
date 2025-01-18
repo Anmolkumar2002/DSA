@@ -18,24 +18,6 @@ class node
     }
 };
 
-node* buildTree(node* root)
-{
-    int data;
-    cout << "Enter the data:";
-    cin >> data;
-    root = new node(data);
-    if(data == -1)
-    {
-        return NULL;
-    }
-    cout << "Enter data for inserting in left of " << data << endl;
-    root -> left = buildTree(root -> left);
-    cout << "Enter data for inserting in right of " << data << endl;
-    root -> right = buildTree(root -> right);
-    return root;
-}
-
-
 void levelorderTraversal(node* root)
 {
     queue <node*> q;
@@ -110,48 +92,47 @@ void postorder(node* root)
     }
 }
 
-int height(node* root)
-{
-    if(root == NULL)
-    {
-        return 0;
+node* insertIntoBST(node *root, int d) {
+    if(root == NULL) {
+        root = new node(d);
+        return root;
     }
 
-    int left = height(root -> left);
-    int right = height(root -> right);
-
-    int ans = max(left, right);
-    return ans;
+    if(d > root -> data) {
+        root -> right = insertIntoBST(root -> right, d);
+    }
+    else {
+        root -> left = insertIntoBST(root -> left , d);
+    }
+    return root;
 }
 
-int main()
-{
+void takeInput(node* &root) {
+    int data;
+    cin >> data;
+
+    while(data != -1) {
+        root = insertIntoBST(root, data);
+        cin >> data;
+    }
+}
+
+int main() {
     node* root = NULL;
 
-    // creating a tree
-    root = buildTree(root);
-    //1 3 7 -1 -1 8 -1 -1 5 9 -1 -1 10 -1 -1 
+    cout << "Enter data to create BST" << endl;
+    takeInput(root);
 
-    //level order
-    cout << "Printing level order traversal output" << endl;
+    cout << "Printing the BST" << endl;
     levelorderTraversal(root);
 
-    //inorder traversal
-    cout << "inorder traversal is :";
+    cout << "Printing the inorder" << endl;
     inorder(root);
-    cout << endl;
 
-    //preorder traversal
-    cout << "preorder traversal is :";
+    cout << endl << "Printing the preorder" << endl;
     preorder(root);
-    cout << endl;
 
-    //postorder traversal
-    cout << "postorder traversal is :";
+    cout << endl << "Printing the postorder" << endl;
     postorder(root);
-    cout << endl; 
-
-    //Height of tree
-    cout << "Height of tree:"<< height(root);
     return 0;
 }
